@@ -1,15 +1,3 @@
-import math
-from typing import Protocol
-
-
-# === Protocol for better type safety ===
-class WidthProvider(Protocol):
-    """Protocol defining the interface expected by SquareHole."""
-    def get_width(self) -> float:
-        """Return the width needed to fit through a square hole."""
-        ...
-
-
 # === Adaptee (Legacy API) ===
 class Circle:
     """A circle with a given radius."""
@@ -35,12 +23,15 @@ class SquareHole:
             raise ValueError("Width must be a positive number.")
         self.width = width
 
-    def fits(self, square_object: WidthProvider) -> bool:
+    def fits(self, square_object) -> bool:
         """Check if the object (must implement get_width) fits in the square hole."""
-        try:
-            return square_object.get_width() <= self.width
-        except AttributeError:
+        if not hasattr(square_object, 'get_width'):
             raise TypeError("Object must implement get_width() method")
+        
+        if not callable(getattr(square_object, 'get_width')):
+            raise TypeError("get_width must be callable")
+            
+        return square_object.get_width() <= self.width
 
 
 # === Adapter ===
@@ -67,10 +58,6 @@ def main():
     
     hole = SquareHole(width=8)
     
-    
-
-
-
     print("\nTrying with a Circle of radius 3 (diameter=6):")
     circle1 = Circle(radius=3)
     # This won't work:
