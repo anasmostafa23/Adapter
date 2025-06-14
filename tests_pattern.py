@@ -4,7 +4,7 @@ from pattern_impl import SquareHole, Circle, CircleAdapter
 from unittest.mock import MagicMock
 
 
-# ✅ POSITIVE TESTS — Normal behavior with correct math (diameter = 2 * radius)
+# POSITIVE TESTS — Normal behavior with correct math (diameter = 2 * radius)
 def test_small_circle_fits_in_large_square_hole():
     """Test that a circle with diameter < hole width fits through."""
     circle = Circle(radius=3)  # diameter = 6
@@ -62,7 +62,7 @@ def test_circle_barely_fits():
     assert hole.fits(adapter) is True
 
 
-# ❌ NEGATIVE TESTS — Invalid inputs and error conditions
+#  NEGATIVE TESTS — Invalid inputs and error conditions
 def test_circle_invalid_string_radius_raises_type_error():
     """Test that creating a circle with string radius raises TypeError."""
     with pytest.raises(TypeError, match="Radius must be a number"):
@@ -111,7 +111,7 @@ def test_fits_with_object_missing_get_width_method():
 
 
 
-# 🧪 MOCK TESTS — Testing interface contracts
+#  MOCK TESTS — Testing interface contracts
 def test_mocked_adapter_fits_successfully():
     """Test that a mocked adapter with small width fits through hole."""
     mock_adapter = MagicMock()
@@ -164,7 +164,7 @@ def test_mocked_adapter_get_width_called_multiple_times():
     assert mock_adapter.get_width.call_count == 2
 
 
-# 🔬 INTEGRATION TESTS — Testing the full adapter pattern flow
+# Testing the full adapter pattern flow
 def test_adapter_pattern_integration_multiple_circles():
     """Test the complete adapter pattern with multiple circles and holes."""
     circles = [
