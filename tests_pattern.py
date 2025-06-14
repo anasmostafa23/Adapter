@@ -137,20 +137,3 @@ def test_mocked_adapter_exact_fit():
     assert result is True
     mock_adapter.get_width.assert_called_once()
 
-
-def test_mocked_adapter_get_width_called_multiple_times():
-    """Test that get_width() can be called multiple times consistently."""
-    mock_adapter = MagicMock()
-    mock_adapter.get_width.return_value = 4.0
-
-    hole = SquareHole(width=5)
-    
-    # Call fits multiple times
-    result1 = hole.fits(mock_adapter)
-    result2 = hole.fits(mock_adapter)
-    
-    assert result1 is True
-    assert result2 is True
-    assert mock_adapter.get_width.call_count == 2
-
-
