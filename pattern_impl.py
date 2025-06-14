@@ -33,8 +33,7 @@ class CircleAdapter:
     
     
     def __init__(self, circle: Circle):
-        if not isinstance(circle, Circle):
-            raise TypeError("Adapter requires a Circle object.")
+       
         self.circle = circle
 
     def get_width(self) -> float:
