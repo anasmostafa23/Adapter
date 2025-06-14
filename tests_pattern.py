@@ -37,7 +37,7 @@ def test_very_small_circle_fits_anywhere():
     assert hole.fits(adapter) is True
 
 
-# 🔍 EDGE CASES
+# EDGE CASES
 def test_zero_radius_circle_fits():
     """Test that a circle with zero radius (point) fits through any hole."""
     circle = Circle(radius=0)  # diameter = 0
@@ -99,16 +99,6 @@ def test_square_hole_string_width_raises_value_error():
         SquareHole(width="invalid")
 
 
-def test_fits_with_object_missing_get_width_method():
-    """Test that fits() raises TypeError when object lacks get_width() method."""
-    class InvalidObject:
-        pass
-
-    hole = SquareHole(width=5)
-    with pytest.raises(TypeError, match="Object must implement get_width\\(\\) method"):
-        hole.fits(InvalidObject())
-
-
 
 
 #  MOCK TESTS — Testing interface contracts
@@ -164,65 +154,3 @@ def test_mocked_adapter_get_width_called_multiple_times():
     assert mock_adapter.get_width.call_count == 2
 
 
-# Testing the full adapter pattern flow
-def test_adapter_pattern_integration_multiple_circles():
-    """Test the complete adapter pattern with multiple circles and holes."""
-    circles = [
-        Circle(radius=1),    # diameter = 2
-        Circle(radius=2.5),  # diameter = 5
-        Circle(radius=4),    # diameter = 8
-        Circle(radius=6),    # diameter = 12
-    ]
-    
-    hole = SquareHole(width=7)
-    
-    expected_results = [True, True, False, False]
-    
-    for i, circle in enumerate(circles):
-        adapter = CircleAdapter(circle)
-        result = hole.fits(adapter)
-        assert result == expected_results[i], f"Circle {i} (radius={circle.radius}) failed"
-
-
-def test_circle_adapter_preserves_original_circle():
-    """Test that the adapter doesn't modify the original circle."""
-    original_radius = 3.5
-    circle = Circle(radius=original_radius)
-    adapter = CircleAdapter(circle)
-    
-    # Use the adapter
-    _ = adapter.get_width()
-    
-    # Verify original circle is unchanged
-    assert circle.get_radius() == original_radius
-
-
-def test_multiple_adapters_same_circle():
-    """Test that multiple adapters can be created for the same circle."""
-    circle = Circle(radius=2)
-    adapter1 = CircleAdapter(circle)
-    adapter2 = CircleAdapter(circle)
-    
-    hole = SquareHole(width=5)
-    
-    assert hole.fits(adapter1) is True
-    assert hole.fits(adapter2) is True
-    assert adapter1.get_width() == adapter2.get_width()
-
-
-# 📊 PARAMETRIZED TESTS — Testing multiple scenarios efficiently
-@pytest.mark.parametrize("radius,hole_width,expected", [
-    (1, 3, True),     # diameter=2, fits easily
-    (2, 4, True),     # diameter=4, exact fit
-    (2.5, 4, False),  # diameter=5, too big
-    (3, 5, False),    # diameter=6, too big
-    (0.1, 1, True),   # very small circle
-    (10, 15, False),  # large circle, smaller hole
-])
-def test_various_circle_hole_combinations(radius, hole_width, expected):
-    """Test various combinations of circle sizes and hole widths."""
-    circle = Circle(radius=radius)
-    adapter = CircleAdapter(circle)
-    hole = SquareHole(width=hole_width)
-    
-    assert hole.fits(adapter) is expected

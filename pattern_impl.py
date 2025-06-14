@@ -1,6 +1,6 @@
 # === Adaptee (Legacy API) ===
 class Circle:
-    """A circle with a given radius."""
+    
     
     def __init__(self, radius: float):
         if not isinstance(radius, (int, float)):
@@ -10,13 +10,13 @@ class Circle:
         self.radius = radius
 
     def get_radius(self) -> float:
-        """Get the radius of the circle."""
+        
         return self.radius
 
 
 # === Target Interface ===
 class SquareHole:
-    """A square hole that objects can fit through."""
+    
     
     def __init__(self, width: float):
         if not isinstance(width, (int, float)) or width <= 0:
@@ -24,19 +24,13 @@ class SquareHole:
         self.width = width
 
     def fits(self, square_object) -> bool:
-        """Check if the object (must implement get_width) fits in the square hole."""
-        if not hasattr(square_object, 'get_width'):
-            raise TypeError("Object must implement get_width() method")
-        
-        if not callable(getattr(square_object, 'get_width')):
-            raise TypeError("get_width must be callable")
             
         return square_object.get_width() <= self.width
 
 
 # === Adapter ===
 class CircleAdapter:
-    """Adapter that allows a Circle to work with SquareHole interface."""
+    
     
     def __init__(self, circle: Circle):
         if not isinstance(circle, Circle):
@@ -44,16 +38,13 @@ class CircleAdapter:
         self.circle = circle
 
     def get_width(self) -> float:
-        """Calculate the minimum square width needed for the circle to fit through.
         
-        A circle needs a square hole with width >= diameter to fit through.
-        """
         return self.circle.get_radius() * 2
 
 
 # === Demo / Main block ===
 def main():
-    """Simple demonstration of the adapter pattern."""
+    
     print("=== Adapter Pattern Demo ===")
     
     hole = SquareHole(width=8)
